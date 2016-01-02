@@ -1,12 +1,10 @@
-package transformations;
+package filters;
 
-import utilities.Image;
-import utilities.Pixel;
+import interfaces.Filter;
+import entities.Image;
+import entities.Pixel;
 
-/**
- * Created by andreas on 2016-01-02.
- */
-public class Sobel {
+public class Sobel implements Filter {
     public static final int[][] HX = {
         { -1,  0,  1 },
         { -2,  0,  2 },
@@ -21,15 +19,16 @@ public class Sobel {
 
     public static final int THRESHOLD = 40;
 
-    public static Image run(Image input) {
-        int W = input.getWidth();
-        int H = input.getHeight();
+    @Override
+    public Image apply(Image image) {
+        int W = image.getWidth();
+        int H = image.getHeight();
 
         Image output = new Image(W, H);
 
 
-        Image imageX = Image.convolve(HX, input);
-        Image imageY = Image.convolve(HY, input);
+        Image imageX = new Convolution(HX).apply(image);
+        Image imageY = new Convolution(HY).apply(image);
 
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
@@ -50,10 +49,20 @@ public class Sobel {
                 //if (g > THRESHOLD && g < 255 - THRESHOLD ) g = g <= 127 ? THRESHOLD : 255 - THRESHOLD;
                 //if (b > THRESHOLD && b < 255 - THRESHOLD ) b = b <= 127 ? THRESHOLD : 255 - THRESHOLD;
 
-                output.getPixel(x, y).setARGB(255, r, g, b);
+                output.getPixel(x, y).setRGB(r, g, b);
             }
         }
 
         return output;
+    }
+
+    @Override
+    public String getSuffix() {
+        return "sobel";
+    }
+
+    @Override
+    public String toString() {
+        return "Sobel";
     }
 }
