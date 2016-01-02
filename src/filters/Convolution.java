@@ -29,7 +29,7 @@ public class Convolution implements Filter {
 
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
-                double value[] = new double[] {0, 0, 0};
+                double value[] = new double[] { 0, 0, 0 };
 
                 for (int kx = M; kx <= N; kx++) {
                     for (int ky = M; ky <= N; ky++) {
