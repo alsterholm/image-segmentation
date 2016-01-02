@@ -2,3 +2,5 @@
 .idea/
 image-segmentation.iml
 out/
+res/
+*.class
