@@ -6,11 +6,11 @@ public class Pixel {
     private int b;
     private int a;
 
-    public Pixel(int rgba) {
-        this.a = (rgba >> 24) & 0xFF;
-        this.r = (rgba >> 16) & 0xFF;
-        this.g = (rgba >> 8) & 0xFF;
-        this.b = rgba & 0xFF;
+    public Pixel(int argb) {
+        this.a = (argb >> 24) & 0xFF;
+        this.r = (argb >> 16) & 0xFF;
+        this.g = (argb >> 8) & 0xFF;
+        this.b = argb & 0xFF;
     }
 
     public Pixel(int a, int r, int g, int b) {
@@ -41,22 +41,21 @@ public class Pixel {
     }
 
     public int getARGB() {
-        int rgba = 0;
+        int argb = 0;
         
-        rgba += (r & 0xFF) << 16;
-        rgba += (g & 0xFF) << 8;
-        rgba += b & 0xFF;
-        rgba += (a & 0xFF) << 24;
+        argb += (r & 0xFF) << 16;
+        argb += (g & 0xFF) << 8;
+        argb += b & 0xFF;
+        argb += (a & 0xFF) << 24;
 
-        return rgba;
+        return argb;
     }
 
-    public void setARGB(int rgba) {
-        this.r = (rgba >> 16) & 0xFF;
-        this.g = (rgba >> 8) & 0xFF;
-        this.b = rgba & 0xFF;
-
-        this.a = (rgba >> 24) & 0xFF;
+    public void setARGB(int argb) {
+        this.a = (argb >> 24) & 0xFF;
+        this.r = (argb >> 16) & 0xFF;
+        this.g = (argb >> 8) & 0xFF;
+        this.b = argb & 0xFF;
     }
 
     public void setARGB(int r, int g, int b, int a) {

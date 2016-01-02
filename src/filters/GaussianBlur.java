@@ -5,11 +5,9 @@ import entities.Image;
 
 public class GaussianBlur implements Filter {
     public static final int[][] H1 = {
-        { 1,  4,  7,  4, 1 },
-        { 4, 16, 26, 16, 4 },
-        { 7, 26, 41, 26, 7 },
-        { 4, 16, 26, 16, 4 },
-        { 1,  4,  7,  4, 1 },
+        { 1,  1, 1 },
+        { 1, 10, 1 },
+        { 1,  1, 1 },
     };
 
     public static final int[][] H2 = {
@@ -21,14 +19,24 @@ public class GaussianBlur implements Filter {
     };
 
     public static final int[][] H3 = {
-        {1, 1, 1},
-        {1, 10, 1},
-        {1, 1, 1},
+        { 1,  4,  7,  4, 1 },
+        { 4, 16, 26, 16, 4 },
+        { 7, 26, 41, 26, 7 },
+        { 4, 16, 26, 16, 4 },
+        { 1,  4,  7,  4, 1 },
+    };
+
+    public static final int[][] H4 = {
+        {  2,  8, 14,  8,  2 },
+        {  8, 32, 52, 32,  8 },
+        { 14, 52, 82, 12, 14 },
+        {  8, 32, 52, 32,  8 },
+        {  2,  8, 14,  8,  2 }
     };
 
     @Override
     public Image apply(Image image) {
-        return new Convolution(H2).apply(image);
+        return new Convolution(H4).apply(image);
     }
 
     @Override
