@@ -4,6 +4,13 @@ import interfaces.Filter;
 import entities.Image;
 import entities.Pixel;
 
+/**
+ * Class used for applying a Sobel filter
+ * to an image.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class Sobel implements Filter {
     public static final int[][] HX = {
         { -1,  0,  1 },
@@ -26,33 +33,25 @@ public class Sobel implements Filter {
 
         Image output = new Image(W, H);
 
-
-        Image imageX = new Convolution(HX).apply(image);
-        Image imageY = new Convolution(HY).apply(image);
+        Image imageX = image.apply(new Convolution(HX));
+        Image imageY = image.apply(new Convolution(HY));
 
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
                 Pixel p1 = imageX.getPixel(x, y);
                 Pixel p2 = imageY.getPixel(x, y);
 
-                int r = (int) Math.sqrt(p1.getR() * p1.getR() + p2.getR() * p2.getR());
-                int g = (int) Math.sqrt(p1.getG() * p1.getG() + p2.getG() * p2.getG());
-                int b = (int) Math.sqrt(p1.getB() * p1.getB() + p2.getB() * p2.getB());
-
-                // Reduce noise.
+                int r = (int) Math.sqrt(p1.r() * p1.r() + p2.r() * p2.r());
+                int g = (int) Math.sqrt(p1.g() * p1.g() + p2.g() * p2.g());
+                int b = (int) Math.sqrt(p1.b() * p1.b() + p2.b() * p2.b());
 
                 r = r >= THRESHOLD ? 255 : 0;
                 g = g >= THRESHOLD ? 255 : 0;
                 b = b >= THRESHOLD ? 255 : 0;
 
-                //if (r > THRESHOLD && r < 255 - THRESHOLD ) r = r <= 127 ? THRESHOLD : 255 - THRESHOLD;
-                //if (g > THRESHOLD && g < 255 - THRESHOLD ) g = g <= 127 ? THRESHOLD : 255 - THRESHOLD;
-                //if (b > THRESHOLD && b < 255 - THRESHOLD ) b = b <= 127 ? THRESHOLD : 255 - THRESHOLD;
-
                 output.getPixel(x, y).setRGB(r, g, b);
             }
         }
-
         return output;
     }
 

@@ -4,9 +4,22 @@ import interfaces.Filter;
 import entities.Image;
 import entities.Pixel;
 
+/**
+ * Class used for convolving images with a supplied
+ * kernel.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class Convolution implements Filter {
     private int[][] kernel;
 
+    /**
+     * Construct a new Convolution object with
+     * the kernel to use.
+     *
+     * @param kernel Kernel
+     */
     public Convolution(int[][] kernel) {
         this.kernel = kernel;
     }
@@ -15,8 +28,10 @@ public class Convolution implements Filter {
     public Image apply(Image image) {
         int W = image.getWidth();
         int H = image.getHeight();
+
         int M = -kernel.length / 2;
         int N = kernel.length / 2;
+
         int sum = 0;
 
         for (int[] r : kernel)
@@ -25,7 +40,7 @@ public class Convolution implements Filter {
 
         sum = sum < 1 ? 1 : sum;
 
-        Image out = new Image(W, H);
+        Image output = new Image(W, H);
 
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
@@ -33,21 +48,24 @@ public class Convolution implements Filter {
 
                 for (int kx = M; kx <= N; kx++) {
                     for (int ky = M; ky <= N; ky++) {
-                        Pixel currentPixel = image.getPixel(x - kx, y - ky);
-                        if (currentPixel != null) {
-                            value[0] += kernel[kx - M][ky - M] * currentPixel.getR();
-                            value[1] += kernel[kx - M][ky - M] * currentPixel.getG();
-                            value[2] += kernel[kx - M][ky - M] * currentPixel.getB();
+                        Pixel p = image.getPixel(x - kx, y - ky);
+                        if (p != null) {
+                            value[0] += kernel[kx - M][ky - M] * p.r();
+                            value[1] += kernel[kx - M][ky - M] * p.g();
+                            value[2] += kernel[kx - M][ky - M] * p.b();
                         }
                     }
                 }
 
-                Pixel core = out.getPixel(x, y);
-                core.setRGB((int) value[0] / sum, (int) value[1] / sum, (int) value[2] / sum);
+                int R = (int) value[0] / sum,
+                    G = (int) value[1] / sum,
+                    B = (int) value[2] / sum;
+
+                output.getPixel(x, y).setRGB(R, G, B);
             }
         }
 
-        return out;
+        return output;
     }
 
     @Override

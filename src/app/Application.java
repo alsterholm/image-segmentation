@@ -7,18 +7,25 @@ import filters.Sobel;
 import filters.ThresholdSegmentation;
 import interfaces.Filter;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * Image segmentation application.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class Application {
     private final Filter GAUSSIAN               = new GaussianBlur();
     private final Filter GREYSCALE              = new Greyscale();
     private final Filter SOBEL                  = new Sobel();
     private final Filter THRESHOLD_SEGMENTATION = new ThresholdSegmentation();
 
-    private final String[] ALLOWED_FILE_ENDINGS = {
-            ".png", ".gif", ".jpg"
+    private final String[] ALLOWED_FILENAME_EXTENSIONS = {
+        ".png", ".gif", ".jpg"
     };
 
     private String filename;
@@ -26,6 +33,12 @@ public class Application {
 
     private Image image;
 
+    /**
+     * Apply a filter to the loaded image, time
+     * it and save the new image.
+     *
+     * @param filter Name of the filter.
+     */
     private void apply(String filter) {
         Filter f = null;
         long t;
@@ -63,8 +76,13 @@ public class Application {
         }
     }
 
+    /**
+     * Run the program.
+     *
+     * @param filename Filename
+     */
     public void run(String filename) {
-        if (!this.validateFileEnding(filename))
+        if (!this.validateFilenameExtension(filename))
             return;
         String dir      = System.getProperty("user.dir");
         String file     = dir + File.separator +  filename;
@@ -86,12 +104,31 @@ public class Application {
         } catch (IOException e) {
             System.err.println("Image could not be loaded.");
         }
+
+        // Try to open result directory
+        try {
+            Desktop.getDesktop().open(new File(path));
+            System.exit(0);
+        } catch (IOException e) {}
     }
 
-    private boolean validateFileEnding(String filename) {
-        String ending = filename.substring(filename.indexOf('.'));
+    /**
+     * Validate the extension of a filename.
+     *
+     * @param filename Filename
+     * @return boolean
+     */
+    private boolean validateFilenameExtension(String filename) {
+        int i = filename.indexOf('.');
 
-        if (!Arrays.asList(ALLOWED_FILE_ENDINGS).contains(ending)) {
+        if (i == -1) {
+            System.out.println("Invalid file format.");
+            return false;
+        }
+
+        String ending = filename.substring(i);
+
+        if (!Arrays.asList(ALLOWED_FILENAME_EXTENSIONS).contains(ending)) {
             System.out.println("Invalid file ending: " + ending);
             return false;
         }

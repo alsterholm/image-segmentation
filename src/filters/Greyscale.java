@@ -4,6 +4,13 @@ import entities.Image;
 import entities.Pixel;
 import interfaces.Filter;
 
+/**
+ * Class used for applying a greyscale filter
+ * to an image.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class Greyscale implements Filter {
     @Override
     public Image apply(Image image) {
@@ -14,8 +21,12 @@ public class Greyscale implements Filter {
 
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
+                // Set all channels of each pixel to the average
+                // of the R, G and B channels to create a greyscale
+                // value.
                 Pixel p = image.getPixel(x, y);
-                int g = (p.getR() + p.getG() + p.getB()) / 3;
+                int   g = (int) p.getIntensity();
+
                 output.getPixel(x, y).setRGB(g);
             }
         }

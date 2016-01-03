@@ -3,6 +3,13 @@ package filters;
 import interfaces.Filter;
 import entities.Image;
 
+/**
+ * Class used for applying a Gaussian Blur filter
+ * to an image.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class GaussianBlur implements Filter {
     public static final int[][] H1 = {
         { 1,  1, 1 },

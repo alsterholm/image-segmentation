@@ -4,6 +4,13 @@ import interfaces.Filter;
 import entities.Image;
 import entities.Pixel;
 
+/**
+ * Class used for segmenting an image using
+ * a simple threshold.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class ThresholdSegmentation implements Filter {
     @Override
     public Image apply(Image image) {
@@ -11,13 +18,7 @@ public class ThresholdSegmentation implements Filter {
         int H = image.getHeight();
 
         Image output = new Image(W, H);
-        double threshold = this.calculateThreshold(image);
-
-        image.stream().forEach(pixel -> {
-            double i = pixel.getIntensity();
-
-
-        });
+        double threshold = this.getThreshold(image);
 
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
@@ -34,20 +35,25 @@ public class ThresholdSegmentation implements Filter {
         return output;
     }
 
-    private double calculateThreshold(Image input) {
-        int W = input.getWidth();
-        int H = input.getHeight();
+    /**
+     * Calculate threshold of the image.
+     *
+     * @param image Image
+     * @return Threshold
+     */
+    private double getThreshold(Image image) {
+        int W = image.getWidth();
+        int H = image.getHeight();
 
         double u1, u2, tNew, tOld = 0;
 
-        Pixel p1 = input.getPixel(0, 0);
-        Pixel p2 = input.getPixel(W - 1, 0);
-        Pixel p3 = input.getPixel(0, H - 1);
-        Pixel p4 = input.getPixel(W - 1, H - 1);
-
+        Pixel p1 = image.getPixel(0, 0);
+        Pixel p2 = image.getPixel(W - 1, 0);
+        Pixel p3 = image.getPixel(0, H - 1);
+        Pixel p4 = image.getPixel(W - 1, H - 1);
 
         u1 = (p1.getIntensity() + p2.getIntensity() + p3.getIntensity() + p4.getIntensity()) / 4;
-        u2 = this.intensityWithoutCorners(input);
+        u2 = this.intensityWithoutCorners(image);
 
         tNew = (u1 + u2) / 2;
 
@@ -58,7 +64,7 @@ public class ThresholdSegmentation implements Filter {
 
             for (int x = 0; x < W; x++) {
                 for (int y = 0; y < H; y++) {
-                    double i = input.getPixel(x, y).getIntensity();
+                    double i = image.getPixel(x, y).getIntensity();
 
                     if (i < tNew) {
                         u1 += i;
@@ -83,22 +89,28 @@ public class ThresholdSegmentation implements Filter {
         return tNew;
     }
 
-    private double intensityWithoutCorners(Image input) {
-        int W = input.getWidth();
-        int H = input.getHeight();
+    /**
+     * Get the average intensity excluding the image’s corners.
+     *
+     * @param image Image
+     * @return Average intensity
+     */
+    private double intensityWithoutCorners(Image image) {
+        int W = image.getWidth();
+        int H = image.getHeight();
 
         double avg = 0;
-        int pxAmount = (W * H) - 4;
+        int pixels = (W * H) - 4;
 
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
-                if (!((x == 0 && y == 0) || (x == W - 1 && y == 0) || (x == 0 && y == H - 1) || (x == W - 1 && y == H - 1))) {
-                    avg += input.getPixel(x, y).getIntensity();
+                if (!(x == 0 && y == 0) && !(x == W - 1 && y == 0) && !(x == 0 && y == H - 1) && !(x == W - 1 && y == H - 1)) {
+                    avg += image.getPixel(x, y).getIntensity();
                 }
             }
         }
 
-        return avg / pxAmount;
+        return avg / pixels;
     }
 
     public String getSuffix() {

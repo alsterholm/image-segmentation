@@ -1,18 +1,37 @@
 package entities;
 
+/**
+ * Class used to represent a pixel of
+ * an image.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
+ */
 public class Pixel {
-    private int r;
-    private int g;
-    private int b;
-    private int a;
+    private int a, r, g, b;
 
+    /**
+     * Construct a new pixel with the supplied
+     * color value.
+     *
+     * @param argb Color
+     */
     public Pixel(int argb) {
         this.a = (argb >> 24) & 0xFF;
         this.r = (argb >> 16) & 0xFF;
-        this.g = (argb >> 8) & 0xFF;
-        this.b = argb & 0xFF;
+        this.g = (argb >> 8)  & 0xFF;
+        this.b =  argb        & 0xFF;
     }
 
+    /**
+     * Construct a new pixel with the supplied
+     * alpha, red, green and blue values.
+     *
+     * @param a Alpha
+     * @param r Red
+     * @param g Green
+     * @param b Blue
+     */
     public Pixel(int a, int r, int g, int b) {
         this.a = a;
         this.r = r;
@@ -20,60 +39,98 @@ public class Pixel {
         this.b = b;
     }
 
+    /**
+     * Construct a black pixel.
+     */
     public Pixel() {
         this(255, 0, 0, 0);
     }
 
-    public int getA() {
+    /**
+     * Get the value of the pixel’s alpha channel.
+     * @return Alpha
+     */
+    public int a() {
         return a;
     }
 
-    public int getR() {
+    /**
+     * Get the value of the pixel’s red channel.
+     * @return Red
+     */
+    public int r() {
         return r;
     }
 
-    public int getG() {
+    /**
+     * Get the value of the pixel’s green channel.
+     * @return Green
+     */
+    public int g() {
         return g;
     }
 
-    public int getB() {
+    /**
+     * Get the value of the pixel’s blue channel.
+     * @return Blue
+     */
+    public int b() {
         return b;
     }
 
+    /**
+     * Get the 32 bit color value of the pixel.
+     * @return Pixel’s color
+     */
     public int getARGB() {
         int argb = 0;
-        
+
+        argb += (a & 0xFF) << 24;
         argb += (r & 0xFF) << 16;
         argb += (g & 0xFF) << 8;
-        argb += b & 0xFF;
-        argb += (a & 0xFF) << 24;
+        argb +=  b & 0xFF;
 
         return argb;
     }
 
-    public void setARGB(int argb) {
-        this.a = (argb >> 24) & 0xFF;
-        this.r = (argb >> 16) & 0xFF;
-        this.g = (argb >> 8) & 0xFF;
-        this.b = argb & 0xFF;
-    }
-
-    public void setARGB(int r, int g, int b, int a) {
+    /**
+     * Set the color of the pixel.
+     *
+     * @param a Alpha
+     * @param r Red
+     * @param g Green
+     * @param b Blue
+     */
+    public void setARGB(int a, int r, int g, int b) {
+        this.a = a;
         this.r = r;
         this.g = g;
         this.b = b;
-        this.a = a;
     }
 
+    /**
+     * Set the color of a pixel.
+     * @param r Red
+     * @param g Green
+     * @param b Blue
+     */
     public void setRGB(int r, int g, int b) {
-        this.setARGB(r, g, b, 255);
+        this.setARGB(255, r, g, b);
     }
 
-    public void setRGB(int i) {
-        this.setRGB(i, i, i);
+    /**
+     * Set a greyscale color to a pixel.
+     * @param c Greyscale value
+     */
+    public void setRGB(int c) {
+        this.setRGB(c, c, c);
     }
 
+    /**
+     * Get the pixel’s intensity.
+     * @return Pixel’s intensity
+     */
     public double getIntensity() {
-        return (double) this.r + this.g + this.b / 3;
+        return (double) (this.r + this.g + this.b) / 3;
     }
 }
