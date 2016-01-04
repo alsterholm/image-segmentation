@@ -28,6 +28,10 @@ public class Image {
         this.pixels = load(ImageIO.read(new File(path)));
     }
 
+    public Image(Pixel[][] pixels) {
+        this.pixels = pixels;
+    }
+
     /**
      * Create a black image with the supplied width
      * and height.

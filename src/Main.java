@@ -15,7 +15,8 @@ public class Main {
             try {
                 filename = br.readLine();
                 System.out.println();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
 
         new Application().run(filename);

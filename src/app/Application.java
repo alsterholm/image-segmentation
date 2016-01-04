@@ -79,6 +79,13 @@ public class Application {
             case "convolve_y":
                 f = CONVOLUTION_Y;
                 break;
+
+            case "edge_thinning":
+                f = new EdgeThinning(((Sobel) SOBEL).getAngles());
+                break;
+
+            case "connected":
+                f = new ConnectedSegmentation();
         }
 
         if (f != null) {
@@ -88,7 +95,12 @@ public class Application {
             System.out.printf("%-50s", "Applying filter " + f);
 
             Image i = image.apply(f);
-            i.save(directory + filename + "-" + f.getSuffix());
+            if (f instanceof ConnectedSegmentation) {
+                ConnectedSegmentation c = (ConnectedSegmentation) f;
+                c.saveSegments(directory + filename + "-segment");
+            } else {
+                i.save(directory + filename + "-" + f.getSuffix());
+            }
             t = System.currentTimeMillis() - t;
             System.out.printf("Done (%s ms)\n", t);
 
@@ -118,9 +130,11 @@ public class Application {
             apply("greyscale");
             apply("gaussian");
             //apply("convolve_x");
-            apply("convolve_y");
-            //apply("sobel");
+            //apply("convolve_y");
+            apply("sobel");
+            apply("edge_thinning");
             //apply("threshold");
+            apply("connected");
 
             System.out.printf("\nResults available in %s\n\n", path);
         } catch (IOException e) {

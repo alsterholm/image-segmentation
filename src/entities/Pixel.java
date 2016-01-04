@@ -9,6 +9,14 @@ package entities;
  */
 public class Pixel {
     private int a, r, g, b;
+    private boolean visited = false;
+
+    /**
+     * Construct a black pixel.
+     */
+    public Pixel() {
+        this(255, 0, 0, 0);
+    }
 
     /**
      * Construct a new pixel with the supplied
@@ -37,13 +45,6 @@ public class Pixel {
         this.r = r;
         this.g = g;
         this.b = b;
-    }
-
-    /**
-     * Construct a black pixel.
-     */
-    public Pixel() {
-        this(255, 0, 0, 0);
     }
 
     /**
@@ -76,6 +77,14 @@ public class Pixel {
      */
     public int b() {
         return b;
+    }
+
+    /**
+     * Get the pixel’s intensity.
+     * @return Pixel’s intensity
+     */
+    public double getIntensity() {
+        return (double) (this.r + this.g + this.b) / 3;
     }
 
     /**
@@ -126,11 +135,11 @@ public class Pixel {
         this.setRGB(c, c, c);
     }
 
-    /**
-     * Get the pixel’s intensity.
-     * @return Pixel’s intensity
-     */
-    public double getIntensity() {
-        return (double) (this.r + this.g + this.b) / 3;
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited() {
+        this.visited = true;
     }
 }

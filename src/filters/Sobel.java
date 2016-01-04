@@ -25,6 +25,8 @@ public class Sobel implements Filter {
         {  1,  2,  1 }
     };
 
+    private double[][] angles;
+
     @Override
     public Image apply(Image image) {
         int W = image.getWidth();
@@ -35,19 +37,26 @@ public class Sobel implements Filter {
         Image imageX = image.apply(new Convolution(HX));
         Image imageY = image.apply(new Convolution(HY));
 
+        angles = new double[W][H];
+
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
-                Pixel p1 = imageX.getPixel(x, y);
-                Pixel p2 = imageY.getPixel(x, y);
+                Pixel px = imageX.getPixel(x, y);
+                Pixel py = imageY.getPixel(x, y);
 
-                int r = (int) Math.sqrt(p1.r() * p1.r() + p2.r() * p2.r());
-                int g = (int) Math.sqrt(p1.g() * p1.g() + p2.g() * p2.g());
-                int b = (int) Math.sqrt(p1.b() * p1.b() + p2.b() * p2.b());
+                int r = (int) Math.sqrt(px.r() * px.r() + py.r() * py.r());
+                int g = (int) Math.sqrt(px.g() * px.g() + py.g() * py.g());
+                int b = (int) Math.sqrt(px.b() * px.b() + py.b() * py.b());
 
+                angles[x][y] = Math.atan2(py.r(), px.r());
                 output.getPixel(x, y).setRGB(r, g, b);
             }
         }
         return output;
+    }
+
+    public double[][] getAngles() {
+        return this.angles;
     }
 
     @Override
