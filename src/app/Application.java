@@ -19,7 +19,7 @@ public class Application {
     private final Filter GAUSSIAN               = new GaussianBlur();
     private final Filter GREYSCALE              = new Greyscale();
     private final Filter SOBEL                  = new Sobel();
-    private final Filter THRESHOLD_SEGMENTATION = new ThresholdSegmentation();
+    private final Filter THRESHOLD_SEGMENTATION = new TSegment();
     private final Filter CONVOLUTION_X          = new Convolution(HX);
     private final Filter CONVOLUTION_Y          = new Convolution(HY);
 
@@ -127,14 +127,15 @@ public class Application {
         try {
             image = new Image(file);
 
-            apply("greyscale");
-            apply("gaussian");
+            //apply("greyscale");
+            //apply("gaussian");
             //apply("convolve_x");
             //apply("convolve_y");
-            apply("sobel");
-            apply("edge_thinning");
+            //apply("sobel");
+            //apply("edge_thinning");
             //apply("threshold");
-            apply("connected");
+            //apply("connected");
+
 
             System.out.printf("\nResults available in %s\n\n", path);
         } catch (IOException e) {

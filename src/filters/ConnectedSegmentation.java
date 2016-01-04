@@ -14,7 +14,7 @@ import java.util.Stack;
 public class ConnectedSegmentation implements Filter {
     private LinkedList<LinkedList<Pixel>> segments = new LinkedList<>();
 
-    private final int THRESHOLD = 10;
+    private final int THRESHOLD = 1500;
     private boolean[][] visited;
 
     private int W;
@@ -67,10 +67,11 @@ public class ConnectedSegmentation implements Filter {
     }
 
     public double compareColors(Pixel p1, Pixel p2) {
-        int a = (int) p1.getIntensity();
-        int b = (int) p2.getIntensity();
-
-        return Math.abs(a - b);
+        return Math.sqrt(
+            Math.pow(p2.r() - p1.r(), 2) +
+            Math.pow(p2.g() - p1.g(), 2) +
+            Math.pow(p2.b() - p1.b(), 2)
+        );
     }
 
     public LinkedList<LinkedList<Pixel>> getSegments() {
@@ -78,7 +79,18 @@ public class ConnectedSegmentation implements Filter {
     }
 
     public void saveSegments(String filename) {
+        int x = 1;
+        for (LinkedList<Pixel> segment : segments) {
+            if (segment.size() > 100) {
+                Image image = new Image(W, H);
 
+                for (Pixel p : segment) {
+                    image.getPixel(p.x(), p.y()).setRGB(255);
+                }
+
+                image.save(filename + "segment-" + x++);
+            }
+        }
     }
 
     @Override
