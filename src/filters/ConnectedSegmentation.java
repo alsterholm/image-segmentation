@@ -59,11 +59,10 @@ public class ConnectedSegmentation implements Filter {
     }
 
     public double compareColors(Pixel p1, Pixel p2) {
-        return Math.sqrt(
-            Math.pow(p2.r() - p1.r(), 2) +
-            Math.pow(p2.g() - p1.g(), 2) +
-            Math.pow(p2.b() - p1.b(), 2)
-        );
+        int r = p2.r() - p1.r();
+        int g = p2.g() - p1.g();
+        int b = p2.b() - p1.b();
+        return Math.sqrt(r * r + b * b + b * b);
     }
 
     public LinkedList<Image> getSegments() {
