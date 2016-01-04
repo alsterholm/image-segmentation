@@ -19,24 +19,22 @@ public class Application {
     private final Filter GAUSSIAN               = new GaussianBlur();
     private final Filter GREYSCALE              = new Greyscale();
     private final Filter SOBEL                  = new Sobel();
-    private final Filter THRESHOLD_SEGMENTATION = new TSegment();
-    private final Filter CONVOLUTION_X          = new Convolution(HX);
-    private final Filter CONVOLUTION_Y          = new Convolution(HY);
+    private final Filter THRESHOLD_SEGMENTATION = new ThresholdSegment();
 
     private final String[] ALLOWED_FILENAME_EXTENSIONS = {
         ".png", ".gif", ".jpg"
     };
 
     public static final int[][] HX = {
-            { -1,  0,  1 },
-            { -2,  0,  2 },
-            { -1,  0,  1 }
+        { -1,  0,  1 },
+        { -2,  0,  2 },
+        { -1,  0,  1 }
     };
 
     public static final int[][] HY = {
-            { -1, -2, -1 },
-            {  0,  0,  0 },
-            {  1,  2,  1 }
+        { -1, -2, -1 },
+        {  0,  0,  0 },
+        {  1,  2,  1 }
     };
 
     private String filename;
@@ -71,21 +69,9 @@ public class Application {
                 f = THRESHOLD_SEGMENTATION;
                 break;
 
-            case "convolve_x":
-                f = CONVOLUTION_X;
-                break;
-
-
-            case "convolve_y":
-                f = CONVOLUTION_Y;
-                break;
-
             case "edge_thinning":
                 f = new EdgeThinning(((Sobel) SOBEL).getAngles());
                 break;
-
-            case "connected":
-                f = new ConnectedSegmentation();
         }
 
         if (f != null) {
@@ -95,12 +81,12 @@ public class Application {
             System.out.printf("%-50s", "Applying filter " + f);
 
             Image i = image.apply(f);
-            if (f instanceof ConnectedSegmentation) {
-                ConnectedSegmentation c = (ConnectedSegmentation) f;
+            if (f instanceof ThresholdSegment) {
+                ThresholdSegment c = (ThresholdSegment) f;
                 c.saveSegments(directory + filename + "-segment");
-            } else {
-                i.save(directory + filename + "-" + f.getSuffix());
             }
+
+            i.save(directory + filename + "-" + f.getSuffix());
             t = System.currentTimeMillis() - t;
             System.out.printf("Done (%s ms)\n", t);
 
@@ -129,12 +115,9 @@ public class Application {
 
             //apply("greyscale");
             //apply("gaussian");
-            //apply("convolve_x");
-            //apply("convolve_y");
             //apply("sobel");
             //apply("edge_thinning");
-            //apply("threshold");
-            //apply("connected");
+            apply("threshold");
 
 
             System.out.printf("\nResults available in %s\n\n", path);

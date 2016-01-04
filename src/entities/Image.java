@@ -117,12 +117,12 @@ public class Image {
             argb += ((int) pixels[p + (hasAlphaChannel ? 2 : 1)] & 0xFF) << 8;
             argb +=  (int) pixels[p + (hasAlphaChannel ? 1 : 0)] & 0xFF;
 
-            img[x][y] = new Pixel(argb, x, y);
-            y++;
+            img[y][x] = new Pixel(argb, x, y);
+            x++;
 
-            if (y == W) {
-                y = 0;
-                x++;
+            if (x == W) {
+                x = 0;
+                y++;
             }
         }
 

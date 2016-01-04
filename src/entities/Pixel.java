@@ -9,6 +9,7 @@ package entities;
  */
 public class Pixel {
     private int a, r, g, b, x, y;
+    private boolean visited;
 
     /**
      * Construct a black pixel.
@@ -28,6 +29,8 @@ public class Pixel {
         this.r = (argb >> 16) & 0xFF;
         this.g = (argb >> 8)  & 0xFF;
         this.b =  argb        & 0xFF;
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -142,5 +145,13 @@ public class Pixel {
      */
     public void setRGB(int c) {
         this.setRGB(c, c, c);
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }

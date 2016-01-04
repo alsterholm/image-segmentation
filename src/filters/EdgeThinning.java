@@ -5,7 +5,10 @@ import entities.Pixel;
 import interfaces.Filter;
 
 /**
- * Created by andreas on 2016-01-04.
+ * Class used for thinning edges in images.
+ *
+ * @author Jimmy Lindström (ae7220)
+ * @author Andreas Indal (ae2922)
  */
 public class EdgeThinning implements Filter {
     private double[][] angles;
