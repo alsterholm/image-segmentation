@@ -5,6 +5,7 @@ import entities.Pixel;
 import interfaces.Filter;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Created by andreas on 2016-01-04.
@@ -42,18 +43,20 @@ public class ConnectedSegmentation implements Filter {
         return image;
     }
 
-    public void dfs(int x, int y, Pixel p, Image segment, Image image) {
-        if (!p.isVisited()) {
-            p.setVisited();
+    private void dfs(int x, int y, Pixel p, Image segment, Image image) {
+        if (p.isVisited())
+            return;
 
-            for (int[] direction : DIRECTIONS) {
-                Pixel n = image.getPixel(x + direction[0], y + direction[1]);
-                if (n != null) {
-                    if (compareColors(p, n) < THRESHOLD) {
-                        segment.getPixel(x, y).setRGB(255);
-                        dfs(x + direction[0], y + direction[1], n, segment, image);
-                    }
-                }
+        for (int[] direction : DIRECTIONS) {
+            Pixel n = image.getPixel(x + direction[0], y + direction[1]);
+            if (n == null)
+                continue;
+
+            if (compareColors(p, n) < THRESHOLD) {
+                p.setVisited();
+                segment.getPixel(x, y).setRGB(255);
+
+                dfs(x + direction[0], y + direction[1], n, segment, image);
             }
         }
     }
