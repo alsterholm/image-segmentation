@@ -62,7 +62,7 @@ public class ConnectedSegmentation implements Filter {
         int r = p2.r() - p1.r();
         int g = p2.g() - p1.g();
         int b = p2.b() - p1.b();
-        return Math.sqrt(r * r + b * b + b * b);
+        return Math.sqrt(r * r + g * g + b * b);
     }
 
     public LinkedList<Image> getSegments() {
