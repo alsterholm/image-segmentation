@@ -27,6 +27,8 @@ public class EdgeThinning implements Filter {
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
                 double angle = (Math.toDegrees(angles[x][y]) + 180) % 180;
+
+                // Get x and y coordinates of neighbour.
                 int nx = angle < 67.5 ? -1 : angle < 112.5 ?  0 : 1;
                 int ny = angle < 22.5 ?  0 : angle < 157.5 ? -1 : 0;
 

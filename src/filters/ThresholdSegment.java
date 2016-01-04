@@ -30,6 +30,13 @@ public class ThresholdSegment implements Filter {
             { -1,  -1 }, // NW
     };
 
+    /**
+     * Construct a new ThresholdSegmentation object.
+     *
+     * @param THRESHOLD Threshold
+     * @param MINIMUM_PIXELS Minimum pixels in each segmentation.
+     * @param MAXIMUM_PIXELS Maximum pixels in each segmentation.
+     */
     public ThresholdSegment(int THRESHOLD, int MINIMUM_PIXELS, int MAXIMUM_PIXELS) {
         this.THRESHOLD = THRESHOLD;
         this.MINIMUM_PIXELS = MINIMUM_PIXELS;
@@ -106,6 +113,10 @@ public class ThresholdSegment implements Filter {
         }
     }
 
+    /**
+     * Save all detected segments to files.
+     * @param filename Filename
+     */
     public void saveSegments(String filename) {
         int x = 1;
         for (Image image : segments) {

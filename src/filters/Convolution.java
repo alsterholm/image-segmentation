@@ -44,22 +44,23 @@ public class Convolution implements Filter {
 
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
-                double value[] = new double[] { 0, 0, 0 };
+                int R = 0, G = 1, B = 2;
+                double color[] = new double[] { 0, 0, 0 };
 
                 for (int kx = M; kx <= N; kx++) {
                     for (int ky = M; ky <= N; ky++) {
                         Pixel p = image.getPixel(x - kx, y - ky);
                         if (p != null) {
-                            value[0] += kernel[kx - M][ky - M] * p.r();
-                            value[1] += kernel[kx - M][ky - M] * p.g();
-                            value[2] += kernel[kx - M][ky - M] * p.b();
+                            color[R] += kernel[kx - M][ky - M] * p.r();
+                            color[G] += kernel[kx - M][ky - M] * p.g();
+                            color[B] += kernel[kx - M][ky - M] * p.b();
                         }
                     }
                 }
 
-                int R = (int) value[0] / sum,
-                    G = (int) value[1] / sum,
-                    B = (int) value[2] / sum;
+                R = (int) color[R] / sum;
+                G = (int) color[G] / sum;
+                B = (int) color[B] / sum;
 
                 output.getPixel(x, y).setRGB(R, G, B);
             }

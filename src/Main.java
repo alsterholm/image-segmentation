@@ -47,6 +47,7 @@ public class Main {
                 minimumPixels   = Integer.parseInt(br.readLine());
                 System.out.print("Maximum pixels: ");
                 maximumPixels   = Integer.parseInt(br.readLine());
+                System.out.println();
                 new Application(filename, mode, threshold, minimumPixels, maximumPixels).run();
             } catch (Exception e) {
                 System.out.println("ERROR: Bad input, aborting...");

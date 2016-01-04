@@ -83,10 +83,18 @@ public class Pixel {
         return b;
     }
 
+    /**
+     * Get the pixel’s x position.
+     * @return X
+     */
     public int x() {
         return x;
     }
 
+    /**
+     * Get the pixel’s y position.
+     * @return Y
+     */
     public int y() {
         return y;
     }
@@ -147,10 +155,20 @@ public class Pixel {
         this.setRGB(c, c, c);
     }
 
+    /**
+     * Control if the pixel has been visited.
+     *
+     * @return boolean
+     */
     public boolean isVisited() {
         return visited;
     }
 
+    /**
+     * Set the pixel’s visited state.
+     *
+     * @param visited boolean
+     */
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
