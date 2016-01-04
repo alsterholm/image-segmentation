@@ -16,11 +16,6 @@ import java.util.Arrays;
  * @author Andreas Indal (ae2922)
  */
 public class Application {
-    private final Filter GAUSSIAN               = new GaussianBlur();
-    private final Filter GREYSCALE              = new Greyscale();
-    private final Filter SOBEL                  = new Sobel();
-    private final Filter THRESHOLD_SEGMENTATION = new ThresholdSegment();
-
     private final String[] ALLOWED_FILENAME_EXTENSIONS = {
         ".png", ".gif", ".jpg"
     };
@@ -37,10 +32,27 @@ public class Application {
         {  1,  2,  1 }
     };
 
-    private String filename;
-    private String directory;
-
     private Image image;
+    private String fullFilename, filename, directory, mode;
+    private double[][] angles;
+    private final int THRESHOLD, MINIMUM_PIXELS, MAXIMUM_PIXELS;
+    private boolean validFileExtension;
+
+    public Application(String filename, String mode) {
+        this(filename, mode, 50, 300, 8000);
+    }
+
+    public Application(String filename, String mode, int THRESHOLD, int MINIMUM_PIXELS, int MAXIMUM_PIXELS) {
+        this.validateFilenameExtension(filename);
+
+        this.fullFilename   = filename;
+        this.filename       = filename.substring(0, filename.indexOf('.'));
+        this.directory      = ("res" + File.separator + this.filename + File.separator);
+        this.mode           = mode;
+        this.THRESHOLD      = THRESHOLD;
+        this.MINIMUM_PIXELS = MINIMUM_PIXELS;
+        this.MAXIMUM_PIXELS = MAXIMUM_PIXELS;
+    }
 
     /**
      * Apply a filter to the loaded image, time
@@ -53,24 +65,24 @@ public class Application {
         long t;
 
         switch (filter) {
-            case "gaussian":
-                f = GAUSSIAN;
+            case "1":
+                f = new GaussianBlur();
                 break;
 
-            case "greyscale":
-                f = GREYSCALE;
+            case "2":
+                f = new Greyscale();
                 break;
 
-            case "sobel":
-                f = SOBEL;
+            case "3":
+                f = new Sobel();
                 break;
 
-            case "threshold":
-                f = THRESHOLD_SEGMENTATION;
+            case "4":
+                f = new EdgeThinning(this.angles);
                 break;
 
-            case "edge_thinning":
-                f = new EdgeThinning(((Sobel) SOBEL).getAngles());
+            case "5":
+                f = new ThresholdSegment(THRESHOLD, MINIMUM_PIXELS, MAXIMUM_PIXELS);
                 break;
         }
 
@@ -84,6 +96,9 @@ public class Application {
             if (f instanceof ThresholdSegment) {
                 ThresholdSegment c = (ThresholdSegment) f;
                 c.saveSegments(directory + filename + "-segment");
+            } else if (f instanceof Sobel) {
+                Sobel s = (Sobel) f;
+                this.angles = s.getAngles();
             }
 
             i.save(directory + filename + "-" + f.getSuffix());
@@ -96,29 +111,30 @@ public class Application {
 
     /**
      * Run the program.
-     *
-     * @param filename Filename
      */
-    public void run(String filename) {
-        if (!this.validateFilenameExtension(filename))
-            return;
-        String dir      = System.getProperty("user.dir");
-        String file     = dir + File.separator +  filename;
-        this.filename   = filename.substring(0, filename.indexOf('.'));
-        this.directory  = ("res" + File.separator + this.filename + File.separator);
-        String path     = dir + File.separator + "res" + File.separator + this.filename;
+    public void run() {
+        if (!validFileExtension) return;
+
+        String dir  = System.getProperty("user.dir");
+        String file = dir + File.separator +  this.fullFilename;
+        String path = dir + File.separator + "res" + File.separator + this.filename;
 
         new File(path).mkdirs();
 
         try {
             image = new Image(file);
 
-            //apply("greyscale");
-            //apply("gaussian");
-            //apply("sobel");
-            //apply("edge_thinning");
-            apply("threshold");
+            boolean sobel = false;
 
+            for (char c : this.mode.toCharArray()) {
+                if (c == '4' && !sobel) {
+                    System.out.println("ERROR: You must run Sobel before Edge Thinning.");
+                } else {
+                    if (c == '3')
+                        sobel = true;
+                    apply(String.valueOf(c));
+                }
+            }
 
             System.out.printf("\nResults available in %s\n\n", path);
         } catch (IOException e) {
@@ -138,21 +154,21 @@ public class Application {
      * @param filename Filename
      * @return boolean
      */
-    private boolean validateFilenameExtension(String filename) {
+    private void validateFilenameExtension(String filename) {
         int i = filename.indexOf('.');
 
         if (i == -1) {
             System.out.println("Invalid file format.");
-            return false;
+            return;
         }
 
         String ending = filename.substring(i);
 
         if (!Arrays.asList(ALLOWED_FILENAME_EXTENSIONS).contains(ending)) {
             System.out.println("Invalid file ending: " + ending);
-            return false;
+            return;
         }
 
-        return true;
+        validFileExtension = true;
     }
 }

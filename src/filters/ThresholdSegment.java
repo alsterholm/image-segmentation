@@ -30,10 +30,6 @@ public class ThresholdSegment implements Filter {
             { -1,  -1 }, // NW
     };
 
-    public ThresholdSegment() {
-        this(150, 2000, 10000);
-    }
-
     public ThresholdSegment(int THRESHOLD, int MINIMUM_PIXELS, int MAXIMUM_PIXELS) {
         this.THRESHOLD = THRESHOLD;
         this.MINIMUM_PIXELS = MINIMUM_PIXELS;
