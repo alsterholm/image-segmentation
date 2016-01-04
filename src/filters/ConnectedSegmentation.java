@@ -6,14 +6,19 @@ import interfaces.Filter;
 
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Created by andreas on 2016-01-04.
  */
 public class ConnectedSegmentation implements Filter {
-    private LinkedList<Image> segments = new LinkedList<>();
+    private LinkedList<LinkedList<Pixel>> segments = new LinkedList<>();
 
-    private final int THRESHOLD = 150;
+    private final int THRESHOLD = 10;
+    private boolean[][] visited;
+
+    private int W;
+    private int H;
 
     private final int[][] DIRECTIONS = new int[][] {
             {-1,  0 },
@@ -24,16 +29,17 @@ public class ConnectedSegmentation implements Filter {
 
     @Override
     public Image apply(Image image) {
-        int W = image.getWidth();
-        int H = image.getHeight();
+        W = image.getWidth();
+        H = image.getHeight();
+
+        visited = new boolean[W][H];
 
         for (int x = 0; x < W; x++) {
             for (int y = 0; y < H; y++) {
                 Pixel p = image.getPixel(x, y);
-                if (!p.isVisited()) {
-                    Image segment = new Image(W, H);
-
-                    segment.getPixel(x, y).setRGB(255);
+                if (!visited[x][y]) {
+                    LinkedList<Pixel> segment = new LinkedList<>();
+                    segment.add(p);
                     segments.add(segment);
                     dfs(x, y, p, segment, image);
                 }
@@ -43,41 +49,36 @@ public class ConnectedSegmentation implements Filter {
         return image;
     }
 
-    private void dfs(int x, int y, Pixel p, Image segment, Image image) {
-        if (p.isVisited())
+    private void dfs(int x, int y, Pixel p, LinkedList<Pixel> segment, Image image) {
+        if (visited[x][y])
             return;
 
         for (int[] direction : DIRECTIONS) {
             Pixel n = image.getPixel(x + direction[0], y + direction[1]);
-            if (n == null)
-                continue;
 
-            if (compareColors(p, n) < THRESHOLD) {
-                p.setVisited();
-                segment.getPixel(x, y).setRGB(255);
-
-                dfs(x + direction[0], y + direction[1], n, segment, image);
+            if (n != null) {
+                if (compareColors(p, n) < THRESHOLD) {
+                    visited[x][y] = true;
+                    segment.add(n);
+                    dfs(x + direction[0], y + direction[1], n, segment, image);
+                }
             }
         }
     }
 
     public double compareColors(Pixel p1, Pixel p2) {
-        int r = p2.r() - p1.r();
-        int g = p2.g() - p1.g();
-        int b = p2.b() - p1.b();
-        return Math.sqrt(r * r + g * g + b * b);
+        int a = (int) p1.getIntensity();
+        int b = (int) p2.getIntensity();
+
+        return Math.abs(a - b);
     }
 
-    public LinkedList<Image> getSegments() {
+    public LinkedList<LinkedList<Pixel>> getSegments() {
         return segments;
     }
 
     public void saveSegments(String filename) {
-        int x = 1;
-        for (Image i : segments) {
-            i.save(filename  + "-" + x);
-            x++;
-        }
+
     }
 
     @Override

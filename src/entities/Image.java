@@ -44,7 +44,7 @@ public class Image {
 
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
-                pixels[y][x] = new Pixel();
+                pixels[y][x] = new Pixel(x, y);
             }
         }
     }
@@ -117,7 +117,7 @@ public class Image {
             argb += ((int) pixels[p + (hasAlphaChannel ? 2 : 1)] & 0xFF) << 8;
             argb +=  (int) pixels[p + (hasAlphaChannel ? 1 : 0)] & 0xFF;
 
-            img[x][y] = new Pixel(argb);
+            img[x][y] = new Pixel(argb, x, y);
             y++;
 
             if (y == W) {

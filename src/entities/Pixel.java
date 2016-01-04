@@ -8,14 +8,13 @@ package entities;
  * @author Andreas Indal (ae2922)
  */
 public class Pixel {
-    private int a, r, g, b;
-    private boolean visited = false;
+    private int a, r, g, b, x, y;
 
     /**
      * Construct a black pixel.
      */
-    public Pixel() {
-        this(255, 0, 0, 0);
+    public Pixel(int x, int y) {
+        this(255, 0, 0, 0, x, y);
     }
 
     /**
@@ -24,7 +23,7 @@ public class Pixel {
      *
      * @param argb Color
      */
-    public Pixel(int argb) {
+    public Pixel(int argb, int x, int y) {
         this.a = (argb >> 24) & 0xFF;
         this.r = (argb >> 16) & 0xFF;
         this.g = (argb >> 8)  & 0xFF;
@@ -40,11 +39,13 @@ public class Pixel {
      * @param g Green
      * @param b Blue
      */
-    public Pixel(int a, int r, int g, int b) {
+    public Pixel(int a, int r, int g, int b, int x, int y) {
         this.a = a;
         this.r = r;
         this.g = g;
         this.b = b;
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -77,6 +78,14 @@ public class Pixel {
      */
     public int b() {
         return b;
+    }
+
+    public int x() {
+        return x;
+    }
+
+    public int y() {
+        return y;
     }
 
     /**
@@ -133,13 +142,5 @@ public class Pixel {
      */
     public void setRGB(int c) {
         this.setRGB(c, c, c);
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited() {
-        this.visited = true;
     }
 }
