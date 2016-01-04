@@ -4,6 +4,7 @@ import interfaces.Filter;
 import entities.Image;
 import entities.Pixel;
 
+
 /**
  * Class used for applying a Sobel filter
  * to an image.
@@ -24,8 +25,6 @@ public class Sobel implements Filter {
         {  1,  2,  1 }
     };
 
-    public static final int THRESHOLD = 40;
-
     @Override
     public Image apply(Image image) {
         int W = image.getWidth();
@@ -44,10 +43,6 @@ public class Sobel implements Filter {
                 int r = (int) Math.sqrt(p1.r() * p1.r() + p2.r() * p2.r());
                 int g = (int) Math.sqrt(p1.g() * p1.g() + p2.g() * p2.g());
                 int b = (int) Math.sqrt(p1.b() * p1.b() + p2.b() * p2.b());
-
-                r = r >= THRESHOLD ? 255 : 0;
-                g = g >= THRESHOLD ? 255 : 0;
-                b = b >= THRESHOLD ? 255 : 0;
 
                 output.getPixel(x, y).setRGB(r, g, b);
             }
