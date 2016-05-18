@@ -66,11 +66,11 @@ public class Application {
 
         switch (filter) {
             case "1":
-                f = new GaussianBlur();
+                f = new Greyscale();
                 break;
 
             case "2":
-                f = new Greyscale();
+                f = new GaussianBlur();
                 break;
 
             case "3":

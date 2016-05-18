@@ -96,8 +96,8 @@ public class ThresholdSegment implements Filter {
 
                         // Set colors both of pixels in both the
                         // output image and the segment
-                        output.getPixel(px, py).setRGB(R, G, B);
-                        segment.getPixel(px, py).setRGB(R, G, B);
+                        output.getPixel(px, py).setRGB(p.r(), p.g(), p.b());
+                        segment.getPixel(px, py).setRGB(p.r(), p.g(), p.b());
 
                         p.setVisited(true);
 

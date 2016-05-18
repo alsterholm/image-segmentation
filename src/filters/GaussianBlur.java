@@ -43,7 +43,7 @@ public class GaussianBlur implements Filter {
 
     @Override
     public Image apply(Image image) {
-        return new Convolution(H4).apply(image);
+        return new Convolution(H2).apply(image);
     }
 
     @Override
